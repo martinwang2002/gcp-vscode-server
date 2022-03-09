@@ -90,6 +90,15 @@ Host vscode-dev-server
 1. Run `crontab -e` and put
     `* * * * * YOUR_PATH_TO/stop-if-inactive.sh`
 
+1. When you reconnect to ssh with in 5 minutes and the shutdown has scheduled, you may receive *system is going down. unprivileged users are not permitted to log in anymore. for technical details, see pam_nologin(8).*
+    Please edit `/etc/pam.d/sshd` and add
+    ```
+    # Disallow non-root logins when /etc/nologin exists.
+    account [success=1 default=ignore] pam_succeed_if.so quiet uid eq YOUR_USER_ID
+    account    required     pam_nologin.so
+    ```
+    see [https://unix.stackexchange.com/a/241886](https://unix.stackexchange.com/a/241886)
+
 1. Now, enjoy with vscode remote ssh.
 
 ### Extra nots
